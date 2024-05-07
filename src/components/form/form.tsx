@@ -25,6 +25,16 @@ const Form = ({ action, actionState, children }: FormProps) => {
   return (
     <form action={action} className="flex flex-col gap-y-2">
       {children}
+
+      <noscript>
+        {actionState.status === "ERROR" && (
+          <div style={{ color: "red" }}>{actionState.message}</div>
+        )}
+
+        {actionState.status === "SUCCESS" && (
+          <div style={{ color: "green" }}>{actionState.message}</div>
+        )}
+      </noscript>
     </form>
   );
 };
