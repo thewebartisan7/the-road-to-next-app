@@ -2,7 +2,7 @@
 
 import { format } from "date-fns";
 import { LucideCalendar } from "lucide-react";
-import { useState } from "react";
+import { useImperativeHandle, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -15,9 +15,17 @@ type DatePickerProps = {
   id: string;
   name: string;
   defaultValue?: string | undefined;
+  imperativeHandleRef: React.RefObject<{
+    reset: () => void;
+  }>;
 };
 
-const DatePicker = ({ id, name, defaultValue }: DatePickerProps) => {
+const DatePicker = ({
+  id,
+  name,
+  defaultValue,
+  imperativeHandleRef,
+}: DatePickerProps) => {
   const [open, setOpen] = useState(false);
 
   const handleSelect = (selectedDate: Date | undefined) => {
@@ -27,6 +35,16 @@ const DatePicker = ({ id, name, defaultValue }: DatePickerProps) => {
 
   const [date, setDate] = useState<Date | undefined>(
     defaultValue ? new Date(defaultValue) : new Date()
+  );
+
+  useImperativeHandle(
+    imperativeHandleRef,
+    () => ({
+      reset() {
+        setDate(new Date());
+      },
+    }),
+    []
   );
 
   const formattedStringDate = date ? format(date, "yyyy-MM-dd") : "";
