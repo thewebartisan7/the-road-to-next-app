@@ -1,7 +1,7 @@
 "use client";
 
 import { Ticket } from "@prisma/client";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { DatePicker } from "@/components/date-picker";
 import { FieldError } from "@/components/form/field-error";
 import { Form } from "@/components/form/form";
@@ -23,8 +23,14 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
     EMPTY_ACTION_STATE
   );
 
+  const [timestamp, setTimestamp] = useState(Date.now());
+
+  const handleSuccess = () => {
+    setTimestamp(Date.now());
+  };
+
   return (
-    <Form action={action} actionState={actionState}>
+    <Form action={action} actionState={actionState} onSuccess={handleSuccess}>
       <Label htmlFor="title">Title</Label>
       <Input id="title" name="title" type="text" defaultValue={ticket?.title} />
       <FieldError actionState={actionState} name="title" />
@@ -37,6 +43,7 @@ const TicketUpsertForm = ({ ticket }: TicketUpsertFormProps) => {
         <div className="w-1/2">
           <Label htmlFor="deadline">Deadline</Label>
           <DatePicker
+            key={timestamp}
             id="deadline"
             name="deadline"
             defaultValue={ticket?.deadline}
