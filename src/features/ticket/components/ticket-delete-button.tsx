@@ -1,4 +1,5 @@
 import { Ticket } from "@prisma/client";
+import { ConfirmDialog } from "@/components/confirm-dialog";
 import { deleteTicket } from "../actions/delete-ticket";
 
 type TicketDeleteButtonProps = {
@@ -7,7 +8,12 @@ type TicketDeleteButtonProps = {
 };
 
 const TicketDeleteButton = ({ ticket, trigger }: TicketDeleteButtonProps) => {
-  return <form action={deleteTicket.bind(null, ticket.id)}>{trigger}</form>;
+  return (
+    <ConfirmDialog
+      action={deleteTicket.bind(null, ticket.id)}
+      trigger={trigger}
+    />
+  );
 };
 
 export { TicketDeleteButton };
