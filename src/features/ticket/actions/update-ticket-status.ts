@@ -7,7 +7,7 @@ import {
   toActionState,
 } from "@/components/form/utils/to-action-state";
 import { prisma } from "@/lib/prisma";
-import { ticketPath, ticketsPath } from "@/paths";
+import { ticketsPath } from "@/paths";
 
 export const updateTicketStatus = async (id: string, status: TicketStatus) => {
   try {
