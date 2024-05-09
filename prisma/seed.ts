@@ -1,6 +1,5 @@
 import { hash } from "@node-rs/argon2";
 import { PrismaClient } from "@prisma/client";
-import { generateIdFromEntropySize } from "lucia";
 
 const prisma = new PrismaClient();
 
@@ -53,7 +52,6 @@ const seed = async () => {
       return prisma.user.create({
         data: {
           ...user,
-          id: generateIdFromEntropySize(10),
           passwordHash,
         },
       });
