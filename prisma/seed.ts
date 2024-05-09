@@ -44,7 +44,6 @@ const seed = async () => {
 
   await prisma.user.deleteMany();
   await prisma.ticket.deleteMany();
-  await prisma.user.deleteMany();
 
   const passwordHash = await hash("geheimnis");
 
