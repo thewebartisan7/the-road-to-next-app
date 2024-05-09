@@ -1,6 +1,19 @@
+import { hash } from "@node-rs/argon2";
 import { PrismaClient } from "@prisma/client";
+import { generateIdFromEntropySize } from "lucia";
 
 const prisma = new PrismaClient();
+
+const users = [
+  {
+    username: "admin",
+    email: "admin@admin.com",
+  },
+  {
+    username: "user",
+    email: "daniel.drehmann@gmail.com",
+  },
+];
 
 const tickets = [
   {
@@ -31,9 +44,27 @@ const seed = async () => {
   console.log("DB Seed: Started ...");
 
   await prisma.ticket.deleteMany();
+  await prisma.user.deleteMany();
+
+  const dbUsers = await Promise.all(
+    users.map(async (user) => {
+      const passwordHash = await hash("geheimnis");
+
+      return prisma.user.create({
+        data: {
+          ...user,
+          id: generateIdFromEntropySize(10),
+          passwordHash,
+        },
+      });
+    })
+  );
 
   await prisma.ticket.createMany({
-    data: tickets,
+    data: tickets.map((ticket) => ({
+      ...ticket,
+      userId: dbUsers[0].id,
+    })),
   });
 
   const t1 = performance.now();
