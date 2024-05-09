@@ -10,7 +10,6 @@ const users = [
   },
   {
     username: "user",
-    // use your own email here
     email: "daniel.drehmann@gmail.com",
   },
 ];
@@ -45,6 +44,7 @@ const seed = async () => {
 
   await prisma.user.deleteMany();
   await prisma.ticket.deleteMany();
+  await prisma.user.deleteMany();
 
   const passwordHash = await hash("geheimnis");
 
