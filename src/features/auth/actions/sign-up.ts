@@ -49,18 +49,16 @@ export const signUp = async (_actionState: ActionState, formData: FormData) => {
     });
 
     const passwordHash = await hash(password);
-    const userId = generateIdFromEntropySize(10);
 
-    await prisma.user.create({
+    const user = await prisma.user.create({
       data: {
-        id: userId,
         username,
         email,
         passwordHash,
       },
     });
 
-    const session = await lucia.createSession(userId, {});
+    const session = await lucia.createSession(user.id, {});
     const sessionCookie = lucia.createSessionCookie(session.id);
 
     cookies().set(
