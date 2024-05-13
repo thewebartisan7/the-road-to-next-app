@@ -1,6 +1,6 @@
 import { getAuth } from "@/features/auth/queries/get-auth";
+import { isOwner } from "@/features/auth/utils/is-owner";
 import { prisma } from "@/lib/prisma";
-import { isOwner } from "@/utils/is-owner";
 import { ParsedSearchParams } from "../search-params";
 
 export const getTickets = async (
