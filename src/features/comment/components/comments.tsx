@@ -14,7 +14,6 @@ type CommentsProps = {
   paginatedComments: {
     list: CommentWithMetadata[];
     metadata: { count: number; hasNextPage: boolean; cursor?: string };
-    // metadata: { count: number; hasNextPage: boolean; cursor?: number };
   };
 };
 
