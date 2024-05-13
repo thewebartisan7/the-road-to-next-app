@@ -1,3 +1,5 @@
+"use server";
+
 import { getAuth } from "@/features/auth/queries/get-auth";
 import { prisma } from "@/lib/prisma";
 import { isOwner } from "@/utils/is-owner";
