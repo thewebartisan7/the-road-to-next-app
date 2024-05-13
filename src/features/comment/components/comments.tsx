@@ -23,9 +23,18 @@ const Comments = ({ ticketId, paginatedComments }: CommentsProps) => {
       initialPageParam: undefined as string | undefined,
       getNextPageParam: (lastPage) =>
         lastPage.metadata.hasNextPage ? lastPage.metadata.cursor : undefined,
+      initialData: {
+        pages: [
+          {
+            list: paginatedComments.list,
+            metadata: paginatedComments.metadata,
+          },
+        ],
+        pageParams: [],
+      },
     });
 
-  const comments = data?.pages.map((page) => page.list).flat() ?? [];
+  const comments = data.pages.flatMap((page) => page.list) ?? [];
 
   const handleMore = () => fetchNextPage();
 
