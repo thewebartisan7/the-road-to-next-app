@@ -1,11 +1,11 @@
 import { ZodError } from "zod";
 
-export type ActionState = {
+export type ActionState<T = any> = {
   status: "IDLE" | "SUCCESS" | "ERROR";
   message: string;
   fieldErrors: Record<string, string[] | undefined>;
   timestamp: number;
-  data?: unknown;
+  data?: T;
 };
 
 export const EMPTY_ACTION_STATE: ActionState = {
