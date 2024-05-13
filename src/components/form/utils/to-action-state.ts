@@ -5,6 +5,7 @@ export type ActionState = {
   message: string;
   fieldErrors: Record<string, string[] | undefined>;
   timestamp: number;
+  data?: unknown;
 };
 
 export const EMPTY_ACTION_STATE: ActionState = {
@@ -41,12 +42,14 @@ export const fromErrorToActionState = (error: unknown): ActionState => {
 
 export const toActionState = (
   status: ActionState["status"],
-  message: string
+  message: string,
+  data?: unknown
 ): ActionState => {
   return {
     status,
     message,
     fieldErrors: {},
     timestamp: Date.now(),
+    data,
   };
 };

@@ -29,6 +29,15 @@ const Comments = ({ ticketId, paginatedComments }: CommentsProps) => {
     setMetadata(morePaginatedComments.metadata);
   };
 
+  const handleCreateComment = (comment: CommentWithMetadata | undefined) => {
+    if (!comment) return;
+
+    setComments((prevComments) => [
+      { ...comment, isOwner: true },
+      ...prevComments,
+    ]);
+  };
+
   const handleDeleteComment = (id: string) => {
     setComments((prevComments) =>
       prevComments.filter((comment) => comment.id !== id)
@@ -40,7 +49,12 @@ const Comments = ({ ticketId, paginatedComments }: CommentsProps) => {
       <CardCompact
         title="Create Comment"
         description="A new comment will be created"
-        content={<CommentCreateForm ticketId={ticketId} />}
+        content={
+          <CommentCreateForm
+            ticketId={ticketId}
+            onCreateComment={handleCreateComment}
+          />
+        }
       />
 
       <div className="flex flex-col gap-y-2 ml-8">
