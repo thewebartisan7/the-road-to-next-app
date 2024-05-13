@@ -13,7 +13,8 @@ type CommentsProps = {
   ticketId: string;
   paginatedComments: {
     list: CommentWithMetadata[];
-    metadata: { count: number; hasNextPage: boolean; cursor?: number };
+    metadata: { count: number; hasNextPage: boolean; cursor?: string };
+    // metadata: { count: number; hasNextPage: boolean; cursor?: number };
   };
 };
 
