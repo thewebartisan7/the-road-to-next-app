@@ -1,6 +1,10 @@
 "use client";
 
-import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  InfiniteData,
+  useInfiniteQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { CardCompact } from "@/components/card-compact";
 import { Button } from "@/components/ui/button";
 import { PaginatedData } from "@/types/pagination";
@@ -43,11 +47,38 @@ const Comments = ({ ticketId, paginatedComments }: CommentsProps) => {
   const queryClient = useQueryClient();
 
   const handleCreateComment = (comment: CommentWithMetadata | undefined) => {
-    queryClient.invalidateQueries({ queryKey });
+    if (!comment) return;
+
+    queryClient.setQueryData<
+      InfiniteData<Awaited<ReturnType<typeof getComments>>>
+    >(queryKey, (cache) => {
+      if (!cache) return cache;
+
+      const pages = cache.pages.map((page, index) => ({
+        ...page,
+        list:
+          index === 0
+            ? [{ ...comment, isOwner: true }, ...page.list]
+            : page.list,
+      }));
+
+      return { ...cache, pages };
+    });
   };
 
   const handleDeleteComment = (id: string) => {
-    queryClient.invalidateQueries({ queryKey });
+    queryClient.setQueryData<
+      InfiniteData<Awaited<ReturnType<typeof getComments>>>
+    >(queryKey, (cache) => {
+      if (!cache) return cache;
+
+      const pages = cache.pages.map((page) => ({
+        ...page,
+        list: page.list.filter((comment) => comment.id !== id),
+      }));
+
+      return { ...cache, pages };
+    });
   };
 
   return (
