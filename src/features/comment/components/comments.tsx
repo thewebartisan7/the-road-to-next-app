@@ -1,8 +1,10 @@
 "use client";
 
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
+import { useInView } from "react-intersection-observer";
 import { CardCompact } from "@/components/card-compact";
-import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import { PaginatedData } from "@/types/pagination";
 import { addCommentInCache, removeCommentFromCache } from "../cache";
 import { getComments } from "../queries/get-comments";
@@ -39,7 +41,13 @@ const Comments = ({ ticketId, paginatedComments }: CommentsProps) => {
 
   const comments = data.pages.flatMap((page) => page.list) ?? [];
 
-  const handleMore = () => fetchNextPage();
+  const { ref, inView } = useInView();
+
+  useEffect(() => {
+    if (inView && !isFetchingNextPage && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [fetchNextPage, hasNextPage, inView, isFetchingNextPage]);
 
   const queryClient = useQueryClient();
 
@@ -83,17 +91,24 @@ const Comments = ({ ticketId, paginatedComments }: CommentsProps) => {
             ]}
           />
         ))}
+
+        {isFetchingNextPage && (
+          <>
+            <div className="flex gap-x-2">
+              <Skeleton className="h-[82px] w-full" />
+              <Skeleton className="h-[40px] w-[40px]" />
+            </div>
+            <div className="flex gap-x-2">
+              <Skeleton className="h-[82px] w-full" />
+              <Skeleton className="h-[40px] w-[40px]" />
+            </div>
+          </>
+        )}
       </div>
 
-      <div className="flex flex-col justify-center ml-8">
-        {hasNextPage && (
-          <Button
-            variant="ghost"
-            onClick={handleMore}
-            disabled={isFetchingNextPage}
-          >
-            More
-          </Button>
+      <div ref={ref}>
+        {!hasNextPage && (
+          <p className="text-right text-xs italic">No more comments.</p>
         )}
       </div>
     </>
