@@ -1,13 +1,10 @@
 "use client";
 
-import {
-  InfiniteData,
-  useInfiniteQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { CardCompact } from "@/components/card-compact";
 import { Button } from "@/components/ui/button";
 import { PaginatedData } from "@/types/pagination";
+import { addCommentInCache, removeCommentFromCache } from "../cache";
 import { getComments } from "../queries/get-comments";
 import { CommentWithMetadata } from "../types";
 import { CommentCreateForm } from "./comment-create-form";
@@ -48,37 +45,11 @@ const Comments = ({ ticketId, paginatedComments }: CommentsProps) => {
 
   const handleCreateComment = (comment: CommentWithMetadata | undefined) => {
     if (!comment) return;
-
-    queryClient.setQueryData<
-      InfiniteData<Awaited<ReturnType<typeof getComments>>>
-    >(queryKey, (cache) => {
-      if (!cache) return cache;
-
-      const pages = cache.pages.map((page, index) => ({
-        ...page,
-        list:
-          index === 0
-            ? [{ ...comment, isOwner: true }, ...page.list]
-            : page.list,
-      }));
-
-      return { ...cache, pages };
-    });
+    addCommentInCache({ queryClient, queryKey }, { comment });
   };
 
   const handleDeleteComment = (id: string) => {
-    queryClient.setQueryData<
-      InfiniteData<Awaited<ReturnType<typeof getComments>>>
-    >(queryKey, (cache) => {
-      if (!cache) return cache;
-
-      const pages = cache.pages.map((page) => ({
-        ...page,
-        list: page.list.filter((comment) => comment.id !== id),
-      }));
-
-      return { ...cache, pages };
-    });
+    removeCommentFromCache({ queryClient, queryKey }, { id });
   };
 
   return (
