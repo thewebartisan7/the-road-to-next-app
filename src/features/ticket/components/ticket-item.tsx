@@ -6,6 +6,7 @@ import {
   LucideTrash,
 } from "lucide-react";
 import Link from "next/link";
+import { ConfirmDialog } from "@/components/confirm-dialog";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -16,8 +17,8 @@ import {
 } from "@/components/ui/card";
 import { ticketEditPath, ticketPath } from "@/paths";
 import { toCurrencyFromCent } from "@/utils/currency";
+import { deleteTicket } from "../actions/delete-ticket";
 import { TICKET_ICONS } from "../constants";
-import { TicketDeleteButton } from "./ticket-delete-button";
 
 type TicketItemProps = {
   ticket: Ticket;
@@ -42,8 +43,8 @@ const TicketItem = ({ ticket, isDetail }: TicketItemProps) => {
   );
 
   const deleteButton = (
-    <TicketDeleteButton
-      ticket={ticket}
+    <ConfirmDialog
+      action={deleteTicket.bind(null, ticket.id)}
       trigger={
         <Button variant="outline" size="icon">
           <LucideTrash className="h-4 w-4" />
