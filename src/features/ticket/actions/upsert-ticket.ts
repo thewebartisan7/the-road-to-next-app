@@ -14,7 +14,6 @@ import { isOwner } from "@/features/auth/utils/is-owner";
 import { prisma } from "@/lib/prisma";
 import { ticketPath, ticketsPath } from "@/paths";
 import { toCent } from "@/utils/currency";
-import { isOwner } from "@/utils/is-owner";
 
 const upsertTicketSchema = z.object({
   title: z.string().min(1).max(191),
