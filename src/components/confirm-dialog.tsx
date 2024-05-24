@@ -72,6 +72,12 @@ const useConfirmDialog = ({
     } else if (toastRef.current) {
       toast.dismiss(toastRef.current);
     }
+
+    return () => {
+      if (toastRef.current) {
+        toast.dismiss(toastRef.current);
+      }
+    };
   }, [isPending]);
 
   const dialog = (
