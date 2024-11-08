@@ -19,7 +19,7 @@ type TicketMoreMenuProps = {
 const TicketMoreMenu = ({ ticket, trigger }: TicketMoreMenuProps) => {
   const deleteButton = (
     <DropdownMenuItem>
-      <LucideTrash className="mr-2 h-4 w-4" />
+      <LucideTrash className="h-4 w-4" />
       <span>Delete</span>
     </DropdownMenuItem>
   );
