@@ -1,7 +1,5 @@
 import { getTickets } from "@/features/ticket/queries/get-tickets";
 
-export const dynamic = "force-dynamic";
-
 export async function GET() {
   const { list, metadata } = await getTickets(undefined, {
     search: "",
