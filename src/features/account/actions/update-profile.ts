@@ -1,5 +1,7 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+import { z } from "zod";
 import {
   ActionState,
   fromErrorToActionState,
@@ -8,8 +10,6 @@ import {
 import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect";
 import { prisma } from "@/lib/prisma";
 import { accountProfilePath } from "@/paths";
-import { revalidatePath } from "next/cache";
-import { z } from "zod";
 
 // const updateProfileSchema = z.object({
 //   username: z
@@ -35,7 +35,7 @@ const updateProfileSchema = (id: string) => {
           },
         });
 
-        // By checking user.id === id we avoid to show error if user has not change current username
+        // ! By checking user.id === id we avoid to show error if user has not change current username
         return !user || user.id === id;
       }, "This username has been taken"),
     email: z
@@ -51,7 +51,7 @@ const updateProfileSchema = (id: string) => {
           },
         });
 
-        // By checking user.id === id we avoid to show error if user has not change current email
+        // ! By checking user.id === id we avoid to show error if user has not change current email
         return !user || user.id === id;
       }, "This email has been taken"),
   });
@@ -69,22 +69,14 @@ export const updateProfile = async (
       email: formData.get("email"),
     });
 
-    // Alternative way to check unique email and username, but this will show error in toast and not in field error
+    // * Alternative way to check unique email and username,
+    // * but this will show error in toast and not in field error
     // const existingUser = await prisma.user.findFirst({
     //   where: {
     //     OR: [
-    //       {
-    //         username: data.username,
-    //       },
-    //       {
-    //         email: data.email,
-    //       },
+    //       { username: data.username },
+    //       { email: data.email },
     //     ],
-    //   },
-    //   select: {
-    //     id: true,
-    //     email: true,
-    //     username: true,
     //   },
     // });
 
