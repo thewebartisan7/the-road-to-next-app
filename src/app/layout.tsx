@@ -1,10 +1,12 @@
-import "./globals.css";
+import { AppSidebar } from "@/app/_navigation/sidebar/components/app-sidebar";
+import { ThemeProvider } from "@/components/theme/theme-provider";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import { Toaster } from "@/components/ui/sonner";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Sidebar } from "@/app/_navigation/sidebar/components/sidebar";
-import { ThemeProvider } from "@/components/theme/theme-provider";
-import { Toaster } from "@/components/ui/sonner";
+import { CSSProperties } from "react";
 import { Header } from "./_navigation/header";
+import "./globals.css";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -35,18 +37,28 @@ export default function RootLayout({
         <ThemeProvider>
           <Header />
           <div className="flex h-screen overflow-hidden border-collapse">
-            <Sidebar />
-            <main
-              className="
+            <SidebarProvider
+              style={
+                {
+                  "--sidebar-width": "15rem",
+                  "--sidebar-width-mobile": "15rem",
+                } as CSSProperties
+              }
+            >
+              <AppSidebar />
+              <main
+                className="
+                duration-200
                 min-h-screen flex-1
                 overflow-y-auto overflow-x-hidden
                 py-24 px-8
                 bg-secondary/20
                 flex flex-col
               "
-            >
-              {children}
-            </main>
+              >
+                {children}
+              </main>
+            </SidebarProvider>
           </div>
           <Toaster expand />
         </ThemeProvider>
