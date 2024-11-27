@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import {
   Sidebar,
   SidebarContent,
@@ -12,7 +13,6 @@ import {
 import { useAuth } from "@/features/auth/hooks/use-auth";
 import { signInPath, signUpPath } from "@/paths";
 import { getActivePath } from "@/utils/get-active-path";
-import { usePathname } from "next/navigation";
 import { navItems } from "../constants";
 import { AppSidebarItem } from "./app-sidebar-item";
 

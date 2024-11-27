@@ -1,12 +1,12 @@
+import "./globals.css";
+import type { Metadata } from "next";
+import localFont from "next/font/local";
+import { CSSProperties } from "react";
 import { AppSidebar } from "@/app/_navigation/sidebar/components/app-sidebar";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
-import type { Metadata } from "next";
-import localFont from "next/font/local";
-import { CSSProperties } from "react";
 import { Header } from "./_navigation/header";
-import "./globals.css";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
