@@ -1,7 +1,6 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
-import { z } from "zod";
+import { setCookieByKey } from "@/actions/cookies";
 import {
   ActionState,
   fromErrorToActionState,
@@ -11,12 +10,15 @@ import { getAuthOrRedirect } from "@/features/auth/queries/get-auth-or-redirect"
 import { isOwner } from "@/features/auth/utils/is-owner";
 import { prisma } from "@/lib/prisma";
 import { ticketPath } from "@/paths";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { z } from "zod";
 
 const createCommentSchema = z.object({
   content: z.string().min(1).max(1024),
 });
 
-export const createComment = async (
+export const upsertComment = async (
   ticketId: string,
   commentId: string | undefined,
   _actionState: ActionState,
@@ -60,7 +62,8 @@ export const createComment = async (
   revalidatePath(ticketPath(ticketId));
 
   if (commentId) {
-    return toActionState("SUCCESS", "Comment updated successfully");
+    await setCookieByKey("toast", "Comment updated successfully");
+    redirect(ticketPath(ticketId));
   }
 
   return toActionState("SUCCESS", "Comment created successfully");
